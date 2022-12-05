@@ -54,7 +54,7 @@ func (r *Router) GetMoviesPublic(c echo.Context) error {
 
 // GetMovies gets the list of movies.
 func (r *Router) GetMovies(c echo.Context) error {
-	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, GetAuthUserID(c))
+	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, getAuthUserID(c))
 	sortType := c.QueryParam("sort")
 
 	movies, err := r.asSvc.GetMovies(ctx, sortType)
@@ -67,7 +67,7 @@ func (r *Router) GetMovies(c echo.Context) error {
 
 // GetUserMovies gets the user movies.
 func (r *Router) GetUserMovies(c echo.Context) error {
-	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, GetAuthUserID(c))
+	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, getAuthUserID(c))
 	sortType := c.QueryParam("sort")
 
 	userID, err := strconv.Atoi(c.Param("user_id"))
@@ -98,15 +98,9 @@ func (r *Router) GetUserMoviesPublic(c echo.Context) error {
 	return c.JSON(http.StatusOK, movies)
 }
 
-// NewMovie contains the newly created movie payload struct.
-type NewMovie struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-}
-
 // CreateMovie creates a movie.
 func (r *Router) CreateMovie(c echo.Context) error {
-	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, GetAuthUserID(c))
+	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, getAuthUserID(c))
 
 	m := new(NewMovie)
 	err := c.Bind(m)
@@ -123,7 +117,7 @@ func (r *Router) CreateMovie(c echo.Context) error {
 
 // MakeAction makes movie actions.
 func (r *Router) MakeAction(c echo.Context) error {
-	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, GetAuthUserID(c))
+	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, getAuthUserID(c))
 
 	movieID, err := strconv.Atoi(c.Param("movie_id"))
 	if err != nil {
@@ -141,7 +135,7 @@ func (r *Router) MakeAction(c echo.Context) error {
 
 // RemoveAction removes user movie action.
 func (r *Router) RemoveAction(c echo.Context) error {
-	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, GetAuthUserID(c))
+	ctx := context.WithValue(c.Request().Context(), movie.AuthUserIDContextKey, getAuthUserID(c))
 
 	movieID, err := strconv.Atoi(c.Param("movie_id"))
 	if err != nil {
@@ -157,7 +151,8 @@ func (r *Router) RemoveAction(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-func GetAuthUserID(c echo.Context) int {
+// gets user id from JWT token.
+func getAuthUserID(c echo.Context) int {
 	// Get user_id from token.
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*auth.JwtCustomClaims)

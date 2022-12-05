@@ -18,12 +18,12 @@ func TestDB_CreateConnection(t *testing.T) {
 	godotenv.Load("../../../../.env.dist")
 
 	c := DBConfig{
-		MySQLUsername: getEnv("MYSQL_USERNAME"),
-		MySQLPass:     getEnv("MYSQL_PASSWORD"),
-		MySQLReader:   getEnv("MYSQL_READ"),
-		MySQLWriter:   getEnv("MYSQL_WRITE"),
-		MySQLPort:     getEnv("MYSQL_PORT"),
-		MySQLDB:       getEnv("MYSQL_DB"),
+		Username: getEnv("MYSQL_USERNAME"),
+		Pass:     getEnv("MYSQL_PASSWORD"),
+		Reader:   getEnv("MYSQL_READ"),
+		Writer:   getEnv("MYSQL_WRITE"),
+		Port:     getEnv("MYSQL_PORT"),
+		DB:       getEnv("MYSQL_DB"),
 	}
 
 	r, w := NewDB(c)
@@ -31,7 +31,6 @@ func TestDB_CreateConnection(t *testing.T) {
 	assert.IsType(t, &sql.DB{}, w)
 	assert.NoError(t, r.Ping())
 	assert.NoError(t, w.Ping())
-
 }
 
 func getEnv(key string) string {

@@ -13,7 +13,6 @@ services:
       - "../movierama-backend/.env.test"
     depends_on:
       - movierama_db
-      - redis
 
   movierama-frontend:
     container_name: movierama-frontend
@@ -33,10 +32,3 @@ services:
       MYSQL_DATABASE: "movierama"
     ports:
       - "3306:3306"
-
-  redis:
-    image: redis:6.2-alpine
-    restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --requirepass testpass

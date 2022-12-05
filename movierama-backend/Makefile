@@ -20,5 +20,6 @@ test: ## Run unit tests
 	go test ./... -race -cover -tags=integration
 
 ci: ## Run the CI pipeline
+	docker-compose -f $(DOCKER_COMPOSE_YAML) down
 	docker-compose -f $(DOCKER_COMPOSE_YAML) build movierama_ci
 	docker-compose -f $(DOCKER_COMPOSE_YAML) run movierama_ci ./script/ci.sh

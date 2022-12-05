@@ -19,8 +19,6 @@ type DBConfig struct {
 
 // NewDB returns a handle to a Database.
 func NewDB(c DBConfig) (read *sql.DB, write *sql.DB) {
-	log.Printf(" cfg: %w", c)
-	log.Printf(" cfg pass: %w", c.Pass)
 	read, err := sql.Open("mysql",
 		fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=True",
 			c.Username, c.Pass, c.Reader, c.Port, c.DB))

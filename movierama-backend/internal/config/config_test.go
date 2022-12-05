@@ -9,7 +9,8 @@ import (
 )
 
 func TestConfig_New(t *testing.T) {
-	os.Setenv("APP_USE_CACHE", "appusecache")
+	os.Setenv("FRONTEND_URL", "http://localhost")
+	os.Setenv("APP_JWT_SECRET", "secret_key")
 	os.Setenv("APP_PORT", "appport")
 	os.Setenv("MYSQL_USERNAME", "mysql_username")
 	os.Setenv("MYSQL_PASSWORD", "mysql_password")
@@ -17,15 +18,12 @@ func TestConfig_New(t *testing.T) {
 	os.Setenv("MYSQL_WRITE", "mysql_write")
 	os.Setenv("MYSQL_PORT", "3306")
 	os.Setenv("MYSQL_DB", "movierama_test")
-	os.Setenv("REDIS_PASSWORD", "redispass")
-	os.Setenv("REDIS_HOST", "redishost")
-	os.Setenv("REDIS_PORT", "redisport")
-	os.Setenv("REDIS_DB", "redisdb")
 
 	expCfg := &config.Config{
 		App: config.App{
-			WithCache: "appusecache",
-			Port:      "appport",
+			FrontendURL: "http://localhost",
+			JWTSecret:   "secret_key",
+			Port:        "appport",
 		},
 		MySQL: config.MySQL{
 			Username: "mysql_username",
@@ -34,12 +32,6 @@ func TestConfig_New(t *testing.T) {
 			Write:    "mysql_write",
 			Port:     "3306",
 			DB:       "movierama_test",
-		},
-		Redis: config.Redis{
-			Host:     "redishost",
-			Port:     "redisport",
-			Password: "redispass",
-			Db:       "redisdb",
 		},
 	}
 

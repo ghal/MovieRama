@@ -8,14 +8,12 @@ import (
 type Config struct {
 	App   App
 	MySQL MySQL
-	Redis Redis
 }
 
 // App contains app configuration.
 type App struct {
 	FrontendURL string
 	JWTSecret   string
-	WithCache   string
 	Port        string
 }
 
@@ -29,19 +27,10 @@ type MySQL struct {
 	DB       string
 }
 
-// Redis contains redis configuration.
-type Redis struct {
-	Host     string
-	Port     string
-	Password string
-	Db       string
-}
-
 // New constructor
 func New() *Config {
 	cfg := &Config{}
 	cfg.setAppConfig()
-	cfg.setRedisConfig()
 	cfg.setMySQLConfig()
 
 	return cfg
@@ -52,7 +41,6 @@ func (cfg *Config) setAppConfig() {
 	cfg.App = App{
 		FrontendURL: os.Getenv("FRONTEND_URL"),
 		JWTSecret:   os.Getenv("APP_JWT_SECRET"),
-		WithCache:   os.Getenv("APP_USE_CACHE"),
 		Port:        os.Getenv("APP_PORT"),
 	}
 }
@@ -66,15 +54,5 @@ func (cfg *Config) setMySQLConfig() {
 		Write:    os.Getenv("MYSQL_WRITE"),
 		Port:     os.Getenv("MYSQL_PORT"),
 		DB:       os.Getenv("MYSQL_DB"),
-	}
-}
-
-// SetRedisConfig creates a Redis config struct.
-func (cfg *Config) setRedisConfig() {
-	cfg.Redis = Redis{
-		Password: os.Getenv("REDIS_PASSWORD"),
-		Host:     os.Getenv("REDIS_HOST"),
-		Port:     os.Getenv("REDIS_PORT"),
-		Db:       os.Getenv("REDIS_DB"),
 	}
 }

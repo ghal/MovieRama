@@ -1,4 +1,4 @@
-Movierama (Workable THA)
+Movierama
 ==
 
 # Overview
@@ -26,21 +26,20 @@ Just execute `make serve` to serve the program via docker.
 | Type               | Item    | Version |
 |--------------------|---------|---------|
 | FrontEnd Framework | Angular | v15     |
-| Backend Language   | Go      | v1.18   |
+| BackEnd Language   | Go      | v1.18   |
 | BackEnd Framework  | Echo    | v4      |
 
 ## Infrastructure Services
 
-| Type      | Provider | Version    | Purpose            |
-|-----------|----------|------------|--------------------|
-| RDBMS     | MySQL    | v8         | Persistent Storage |
-| K/V store | Redis    | 6.2-alpine | Handles Caching    |
+| Type  | Provider | Version | Purpose            |
+|-------|----------|---------|--------------------|
+| RDBMS | MySQL    | v8      | Persistent Storage |
 
 # API
 
 ## HTTP
 
-Postman Collection Location: _under movierama-backend/doc/postman/_
+Postman Collection Location: _under doc/postman/_
 
 # Developers Handbook
 
@@ -53,8 +52,9 @@ Please use `make <target>` where `<target>` is one of the following:
 `stop`                           Stop the Docker Compose app
 ```
 
-There is a second makefile at `movierama-backend` directory which provides some extra functionalities (linting, testing,
-ci, etc..):
+There is a second makefile at `movierama-backend` directory which provides some extra functionalities such as linting,
+testing,
+ci, etc..:
 
 ``` makefile
 `ci`                             Run the CI pipeline
@@ -66,26 +66,13 @@ ci, etc..):
 
 # Technical Details
 
-For guaranteed data consistency it is recommended disabling cache.
-
 ## Technical Overview
 
-![technical overview](doc/diagrams/movierama.drawio.png)
+![technical overview](doc/diagrams/MovieRama.drawio.png)
 
 ## What has been implemented
 
-- [x] [Feature] Users should be able to log into their account or sign up for a new one
-- [x] [Feature] Users should be able to add movies by completing a form. Movies should be persisted and reference the
-  user that
-  submitted them.
-- [x] [Feature] Users should be able to express their opinion for any movie by either a like or a hate.
-- [x] [Feature] Users can vote only once for each movie and can change their vote at any time by switching to the
-  opposite vote or
-  by retracting their vote altogether.
-- [x] [Feature] Users should not be able to vote for the movies they have submitted.
-- [x] [Feature] Users should be able to view the list of movies and sort them by number of likes, number of hates or
-  date added.
-- [x] [Feature] Users should be able to view all movies submitted by a specific user.
+- [x] Table-driven tests
 - [x] Unit testing.
 - [ ] Integration testing.
 - [ ] E2E testing.
@@ -94,7 +81,6 @@ For guaranteed data consistency it is recommended disabling cache.
 - [ ] Caching layer using decorator pattern.
 - [ ] Adapter pattern for handling the dynamic data types.
 - [ ] Use of builder pattern for creating objects.
-- [ ] Add metrics.
 - [x] Postman collection.
 - [x] Docker implementation.
 
@@ -104,8 +90,11 @@ For guaranteed data consistency it is recommended disabling cache.
   issues.
 - JWT token should contain an encrypted payload, now it can be decoded and reveal the real user id. Should avoid using
   the JWT user id, as is, in the backend side.
-- In the current implementation Users, Movies & Actions assets are coupled into the same db. In order to decouple these,
-  new services should be created that aggregates Movies & Actions along with users using the BFF pattern.
+- In the current implementation Users, Movies & Actions are coupled into the same db. This can cause scalability issues.
+  In order to decouple these, new services should be created that aggregates Movies & Actions along with users using the
+  BFF pattern.
+- A caching mechanism should be implemented for improving performance. A suggested way is to use the decorator pattern
+  in order to encapsulate the repo and cache the repo results.
 - Better configuration management system with multiple type conversions.
 - Add validators for validating user input.
 - Avoid exposing real ids.

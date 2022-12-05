@@ -15,7 +15,6 @@ services:
       - ./../../../.env.test
     depends_on:
       - movierama_db
-      - redis
 
   movierama_ci:
     image: movierama_ci
@@ -25,6 +24,18 @@ services:
     container_name: movierama_ci
     env_file:
       - ./../../../.env.test
+    environment:
+      MYSQL_READ: "movierama_ci_db"
+      MYSQL_WRITE: "movierama_ci_db"
+    depends_on:
+      - movierama_ci_db
+
+  movierama_ci_db:
+    image: mysql:8.0.31
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: "movierama"
 
   movierama_db:
     image: mysql:8.0.31
@@ -34,10 +45,3 @@ services:
       MYSQL_DATABASE: "movierama"
     ports:
       - "3306:3306"
-
-  redis:
-    image: redis:6.2-alpine
-    restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --requirepass testpass
