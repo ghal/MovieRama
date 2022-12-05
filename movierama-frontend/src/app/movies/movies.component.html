@@ -1,0 +1,59 @@
+<div class="container">
+  <header class="jumbotron">
+    <div *ngIf="movies.length==0">
+      <h1>No movies found...</h1>
+    </div>
+    <div class="sort-panel" *ngIf="movies.length>0">
+      Sort by:
+      <a href="javascript:void(0)" (click)="sortMovies('likes')">Likes</a>
+      |
+      <a href="javascript:void(0)" (click)="sortMovies('hates')">Hates</a>
+      |
+      <a href="javascript:void(0)" (click)="sortMovies('date')">Date</a>
+    </div>
+    <div class="movie" *ngFor="let movie of movies">
+      <h1>{{movie.title}}</h1>
+      <h6>
+        posted by:
+        <span *ngIf="movie.is_same_user">
+          <a href="javascript:void(0)" [routerLink]="['/users', movie.user_id, 'movies']">
+            You
+          </a>
+        </span>
+        <span *ngIf="!movie.is_same_user">
+          <a href="javascript:void(0)" [routerLink]="['/users', movie.user_id, 'movies']">
+            {{movie.posted_by}}
+          </a>
+        </span>
+        {{movie.time_ago}}
+      </h6>
+      <p>{{movie.description}}</p>
+      <div *ngIf="!isAuthenticated || movie.is_same_user">
+        <span>Like{{ movie.likes == 1 ? "" : "s"}}: {{movie.likes}}</span>
+        |
+        <span>Hate{{ movie.hates == 1 ? "" : "s"}}: {{movie.hates}}</span>
+      </div>
+      <div *ngIf="isAuthenticated && !movie.is_same_user">
+        <div *ngIf="movie.likes==0 && movie.hates==0">
+          Be the first to vote for this movie:
+          <a href="javascript:void(0)" (click)="makeAction(movie,'like')">Like</a>
+          |
+          <a href="javascript:void(0)" (click)="makeAction(movie,'hate')">Hate</a>
+        </div>
+        <div *ngIf="movie.likes>0 || movie.hates>0">
+          <a href="javascript:void(0)" (click)="makeAction(movie,'like')">Like{{ movie.likes == 1 ? "" : "s"}}
+            : {{movie.likes}}</a>
+          |
+          <a href="javascript:void(0)" (click)="makeAction(movie,'hate')">Hate{{ movie.hates == 1 ? "" : "s"}}
+            : {{movie.hates}}</a>
+        </div>
+
+        <div *ngIf="movie.user_hated">You hate this movie | <a href="javascript:void(0)"
+                                                               (click)="removeAction(movie,'hate')">Undo</a></div>
+        <div *ngIf="movie.user_liked">You like this movie | <a href="javascript:void(0)"
+                                                               (click)="removeAction(movie,'like')">Undo</a></div>
+      </div>
+
+    </div>
+  </header>
+</div>

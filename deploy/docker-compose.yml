@@ -1,0 +1,42 @@
+version: "3.3"
+
+services:
+  movierama-backend:
+    build:
+      context: ../movierama-backend
+      dockerfile: ../movierama-backend/infra/deploy/build/Dockerfile
+    container_name: movierama-backend
+    restart: on-failure
+    ports:
+      - "1323:1323"
+    env_file:
+      - "../movierama-backend/.env.test"
+    depends_on:
+      - movierama_db
+      - redis
+
+  movierama-frontend:
+    container_name: movierama-frontend
+    build:
+      context: ../movierama-frontend
+      dockerfile: ../movierama-frontend/deploy/build/Dockerfile
+    ports:
+      - '4200:80'
+    depends_on:
+      - movierama-backend
+
+  movierama_db:
+    image: mysql:8.0.31
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: "movierama"
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --requirepass testpass

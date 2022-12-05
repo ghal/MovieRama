@@ -1,0 +1,45 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <h1>Add movie</h1>
+
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          [(ngModel)]="form.title"
+          required
+          #title="ngModel"
+        />
+        <div class="alert-danger" *ngIf="title.errors && f.submitted">
+          <div *ngIf="title.errors['required']">Title is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          class="form-control"
+          name="description"
+          [(ngModel)]="form.description"
+          required
+          #description="ngModel"
+        ></textarea>
+        <div class="alert-danger" *ngIf="description.errors && f.submitted">
+          <div *ngIf="description.errors['required']">Description is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
